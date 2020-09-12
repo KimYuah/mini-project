@@ -6,16 +6,7 @@ public class Member {
   private String tel;
   private String name;
   private String password;
-  private String bookstatus;
   public ArrayList<String> book = new ArrayList<>();
-
-  public String getbookstatus() {
-    return bookstatus;
-  } // 대여 상태 가져오기
-
-  public void setbookstatus(String bookstatus) {
-    this.bookstatus = bookstatus;
-  } // 대여 상태 설정
 
   public String getTel() {
     return tel;
