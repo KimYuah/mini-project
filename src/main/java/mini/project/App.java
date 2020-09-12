@@ -1,12 +1,12 @@
 package mini.project;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import mini.project.domain.Book;
 import mini.project.domain.Member;
 import mini.project.handler.BookHandler;
 import mini.project.handler.MemberHandler;
-import mini.project.util.ArrayList;
-import mini.project.util.LinkedList;
-import mini.project.util.List;
 import mini.project.util.Prompt;
 
 public class App {
@@ -60,4 +60,3 @@ public class App {
 
   }
 }
-

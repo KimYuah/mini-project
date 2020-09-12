@@ -1,6 +1,6 @@
 package mini.project.domain;
 
-import mini.project.util.ArrayList;
+import java.util.ArrayList;
 
 public class Member {
   private String tel;
