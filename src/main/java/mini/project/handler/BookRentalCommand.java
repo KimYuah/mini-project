@@ -97,12 +97,13 @@ public class BookRentalCommand implements Command{
   // 도서 반납하는 메서드
   public void returnBook() throws InterruptedException {
     String title = Prompt.inputString("반납할 도서 제목을 입력해주세요 > ");
-    String name = Prompt.inputString("반납하시는 분 이름을 입력해주세요 > ");
     Book book = checkBook(title);
     if (book == null) {
       System.out.printf("[ "+ title +" ]"+" 도서는 존재하지 않습니다. ");
       return;
     } 
+
+    String name = Prompt.inputString("반납하시는 분 이름을 입력해주세요 > ");
 
     Member member = memberHandler.findByName(name);
     checkMember(member);
@@ -112,8 +113,6 @@ public class BookRentalCommand implements Command{
         member.book.remove(i);
       }
     }
-
-    checkBook(title);
 
     if (title.equalsIgnoreCase(book.getTitle()) && !book.isAvailable() ) {
       System.out.println("\n* [ "+title+" ]"+" 도서가 반납되었습니다. *");

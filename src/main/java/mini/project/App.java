@@ -1,11 +1,18 @@
 package mini.project;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import mini.project.domain.Book;
 import mini.project.domain.Member;
-import mini.project.handler.BookHandler;
+import mini.project.handler.BookAddCommand;
+import mini.project.handler.BookDeleteCommand;
+import mini.project.handler.BookListCommand;
+import mini.project.handler.BookRentalCommand;
+import mini.project.handler.BookUpdateCommand;
+import mini.project.handler.Command;
 import mini.project.handler.MemberHandler;
 import mini.project.util.Prompt;
 
@@ -19,15 +26,22 @@ public class App {
     List<Book> bookList = new LinkedList<>();
     List<Book> availableBookList = new ArrayList<>();
     List<Book> unavailableBookList = new ArrayList<>();
-    BookHandler bookHandler = new BookHandler(
-        memberHandler, bookList, availableBookList, unavailableBookList);
+
+    Map<Integer, Command> commandMap = new HashMap<>();
+    commandMap.put(1, new BookAddCommand(bookList, availableBookList));
+    commandMap.put(2, new BookListCommand(bookList, availableBookList, unavailableBookList));
+    commandMap.put(3, new BookDeleteCommand(bookList, availableBookList));
+    commandMap.put(4, new BookUpdateCommand(bookList));
+    commandMap.put(5, new BookRentalCommand(
+        memberHandler, bookList, availableBookList, unavailableBookList));
+
 
 
     loop:
       while (true) {
         System.out.println();
         System.out.println("\t\t---------------------------");
-        String command = Prompt.inputString("\t\t\b [ 도서 관리 프로그램 ] \b\n" +
+        int input = Prompt.inputInt("\t\t\b [ 도서 관리 프로그램 ] \b\n" +
             "\t\t---------------------------"+
             "\n\t\t   1. 도서 등록  \n\n" + 
             "\t\t   2. 도서 목록 \n\n" + 
@@ -39,19 +53,15 @@ public class App {
             "\t\t---------------------------\n"+
             "\t\t 번호를 선택하세요 => ");
 
-        switch (command) {
-          case "1": bookHandler.add(); break;
-          case "2": bookHandler.list(); break;
-          case "3": bookHandler.delete(); break;
-          case "4": bookHandler.update(); break;
-          case "5": bookHandler.rental(); break;
-          case "6": memberHandler.member(); break;
-          case "7":
+        switch (input) {
+          case 6: memberHandler.member(); break;
+          case 7:
             System.out.println("\n\t\t * 도서 관리 프로그램을 종료합니다. *");
             break loop;
           default:
-            System.out.println("\n\t\t * 실행할 수 없는 명령입니다. *");
-            Thread.sleep(500);
+            Command command = commandMap.get(input);
+            command.execute();
+            Thread.sleep(200);
         }
         System.out.println(); 
       }
