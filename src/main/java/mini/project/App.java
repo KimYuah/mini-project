@@ -1,10 +1,15 @@
 package mini.project;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 import mini.project.domain.Book;
 import mini.project.domain.Member;
 import mini.project.handler.BookAddCommand;
@@ -19,16 +24,20 @@ import mini.project.handler.MemberHandler;
 import mini.project.util.Prompt;
 
 public class App {
-  public static void main(String[] args) throws InterruptedException {
+  static List<Book> bookList = new LinkedList<>();
+  static File bookFile = new File("./bookFile.csv");
+  static List<Book> availableBookList = new ArrayList<>();
+  static List<Book> unavailableBookList = new ArrayList<>();
 
+  public static void main(String[] args) throws InterruptedException {
+    loadBooks();
+    loadAvailableBooks();
+    loadunavailableBooks();
     // Member
     List<Member> memberList = new ArrayList<>();
     MemberHandler memberHandler = new MemberHandler(memberList);
 
     // Book
-    List<Book> bookList = new LinkedList<>();
-    List<Book> availableBookList = new ArrayList<>();
-    List<Book> unavailableBookList = new ArrayList<>();
     BookRental bookRental =
         new BookRental(memberHandler, bookList, availableBookList, unavailableBookList);
     BookReturn bookReturn =
@@ -66,6 +75,56 @@ public class App {
     }
 
     Prompt.close();
+    saveBooks();
+  }
 
+  private static void loadAvailableBooks() {
+    for (int i = 0; i < bookList.size(); i++) {
+      Book book = bookList.get(i);
+      if (book.isAvailable()) {
+        availableBookList.add(book);
+      }
+    }
+  }
+
+  private static void loadunavailableBooks() {
+    for (int i = 0; i < bookList.size(); i++) {
+      Book book = bookList.get(i);
+      if (!book.isAvailable()) {
+        unavailableBookList.add(book);
+      }
+    }
+  }
+
+  private static void loadBooks() {
+    try (FileReader in = new FileReader(bookFile); Scanner sc = new Scanner(in);) {
+      int count = 0;
+
+      while (true) {
+        try {
+          bookList.add(Book.valueOfCsv(sc.nextLine()));
+          count++;
+        } catch (NoSuchElementException e) {
+          break;
+        }
+      }
+
+      System.out.printf("%d 개의 도서정보를 불러왔습니다 !", count);
+    } catch (Exception e) {
+      System.out.println("도서 정보 로딩에 실패하였습니다.");
+    }
+  }
+
+  private static void saveBooks() {
+    try (FileWriter out = new FileWriter(bookFile)) {
+      int count = 0;
+      for (Book book : bookList) {
+        out.write(book.toCsvString());
+        count++;
+      }
+      System.out.printf(" %d 개의 도서정보를 저장하였습니다 !", count);
+    } catch (Exception e) {
+      System.out.println("도서 정보 저장 중에 오류 발생");
+    }
   }
 }
