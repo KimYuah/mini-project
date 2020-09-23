@@ -22,8 +22,9 @@ public class BookListCommand implements Command {
   @Override
   public void execute() throws InterruptedException {
     loop: while (true) {
-      String command = Prompt.inputString("\n\n[ 도서 목록 ]\n"
-          + " 1.전체 목록\n 2.대여 가능 목록\n 3.대여 도서 목록\n 4.이전으로\n" + "\n" + "번호를 선택하세요 => ");
+      String command = Prompt.inputString("\n\t\t [ 도서 목록 ]\n\n"
+          + "\t\t 1.전체 목록\n\n \t\t 2.대여 가능 목록\n\n \t\t 3.대여 도서 목록\n\n \t\t 4.이전으로\n\n"
+          + "\t\t 번호를 선택하세요 => ");
       switch (command) {
         case "1":
           list1();
@@ -38,11 +39,11 @@ public class BookListCommand implements Command {
           Thread.sleep(200);
           break;
         case "4":
-          System.out.println("\n* 이전으로 갑니다. *");
+          System.out.println("\n\t\t* 이전으로 갑니다. *");
           Thread.sleep(200);
           break loop;
         default:
-          System.out.println("\n* 실행할 수 없는 명령입니다. *");
+          System.out.println("\n\t\t* 실행할 수 없는 명령입니다. *");
           Thread.sleep(200);
       }
       System.out.println();
@@ -53,18 +54,16 @@ public class BookListCommand implements Command {
 
   // 전체목록출력하는메소드
   public void list1() throws InterruptedException {
-    System.out.println("\n\n[도서 전체 목록]\n");
+    System.out.println("\n\t\t [도서 전체 목록]\n");
 
     Iterator<Book> iterator = bookList.iterator();
 
-    System.out
-        .println("현재 보유 도서량: " + "[ " + bookList.size() + " ]\n-----------------------------");
-    Thread.sleep(300);
+
     while (iterator.hasNext()) {
       Book book = iterator.next();
       System.out.printf(
-          "도서 코드 : %d\n" + "도서 제목 : %s\n" + "도서 저자 : %s\n" + "도서 출판사 : %s\n" + "도서 입고일 : %s\n"
-              + "-----------------------------\n",
+          "\t\t도서 코드 : %d\n\n" + "\t\t도서 제목 : %s\n\n" + "\t\t도서 저자 : %s\n\n" + "\t\t도서 출판사 : %s\n\n"
+              + "\t\t도서 입고일 : %s\n\n" + "\t\t-----------------------------\n",
           book.getNo(), book.getTitle(), book.getAuthor(), book.getPublisher(),
           book.getReceivingDate());
       Thread.sleep(200);
@@ -74,13 +73,13 @@ public class BookListCommand implements Command {
   // 이미 대여된 도서 목록을 출력하는 메서드
   public void unavailableList() throws InterruptedException {
 
-    System.out.println("\n\n[대여된 도서 목록]");
+    System.out.println("\n\t\t [대여된 도서 목록]");
     Iterator<Book> iterator = unavailableBookList.iterator();
     while (iterator.hasNext()) {
       Book book = iterator.next();
-      System.out.printf(
-          "코드 : " + book.getNo() + " / 제목 : " + book.getTitle() + " / 저자 : " + book.getAuthor()
-              + "/ 출판사 : " + book.getPublisher() + " / 입고일 : " + book.getReceivingDate() + "\n");
+      System.out.printf("\n\t\t코드 : " + book.getNo() + " / 제목 : " + book.getTitle() + " / 저자 : "
+          + book.getAuthor() + "/ 출판사 : " + book.getPublisher() + " / 입고일 : "
+          + book.getReceivingDate() + "\n");
       Thread.sleep(200);
     }
   }
@@ -90,9 +89,9 @@ public class BookListCommand implements Command {
     Iterator<Book> iterator = availableBookList.iterator();
     while (iterator.hasNext()) {
       Book book = iterator.next();
-      System.out.printf(
-          "코드 : " + book.getNo() + " / 제목 : " + book.getTitle() + " / 저자 : " + book.getAuthor()
-              + " / 출판사 : " + book.getPublisher() + " / 입고일 : " + book.getReceivingDate() + "\n");
+      System.out.printf("\n\t\t 코드 : " + book.getNo() + " / 제목 : " + book.getTitle() + " / 저자 : "
+          + book.getAuthor() + " / 출판사 : " + book.getPublisher() + " / 입고일 : "
+          + book.getReceivingDate() + "\n");
       Thread.sleep(200);
     }
     System.out.println();
@@ -100,7 +99,7 @@ public class BookListCommand implements Command {
   }
 
   public void availableList() throws InterruptedException {
-    System.out.println("\n\n[대여 가능 목록]");
+    System.out.println("\t\t [대여 가능 목록]");
     printAvailableList(availableBookList);
   }
 }
